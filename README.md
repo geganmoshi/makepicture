@@ -8,8 +8,8 @@ python合成训练图片用于fnc模型或者deeplab v3模型训练，该算法�
 
 ![image text](https://github.com/geganmoshi/makepicture/blob/master/%E5%9B%BE%E7%89%87/bg.jpg)
 ![image text](https://github.com/geganmoshi/makepicture/blob/master/%E5%9B%BE%E7%89%87/picture.jpg)
-![image text](https://github.com/geganmoshi/makepicture/blob/master/%E5%9B%BE%E7%89%87/new_ing.jpg)
-![image text](https://github.com/geganmoshi/makepicture/blob/master/%E5%9B%BE%E7%89%87/label.jpg)
-![image text](https://github.com/geganmoshi/makepicture/blob/master/%E5%9B%BE%E7%89%87/label_2.jpg)
-![image text](https://github.com/geganmoshi/makepicture/blob/master/%E5%9B%BE%E7%89%87/label_3.jpg)
-![image text](https://github.com/geganmoshi/makepicture/blob/master/%E5%9B%BE%E7%89%87/out.jpg)
+![image text](https://github.com/geganmoshi/makepicture/blob/master/%E5%9B%BE%E7%89%87/new_ing.png)
+![image text](https://github.com/geganmoshi/makepicture/blob/master/%E5%9B%BE%E7%89%87/label.png)
+![image text](https://github.com/geganmoshi/makepicture/blob/master/%E5%9B%BE%E7%89%87/label_2.png)
+![image text](https://github.com/geganmoshi/makepicture/blob/master/%E5%9B%BE%E7%89%87/label_3.png)
+![image text](https://github.com/geganmoshi/makepicture/blob/master/%E5%9B%BE%E7%89%87/out.png)
