@@ -4,7 +4,7 @@ import numpy as np
 import cv2
 import math
 
-def make_picture(bg,word,degree):
+def make_picture(bg,word,degree,scale_x,scale_y):
     bg = Image.open(bg)
     bg_width = bg.size[0]
     bg_height = bg.size[1]
@@ -33,10 +33,10 @@ def make_picture(bg,word,degree):
     bg.paste(region, box)
     bg.save('./out.png')
 
-    x_1, y_1 = Nrotate(degree,int(word_width/4),int(word_height/4),int(word_width/2),int(word_height/2),word_height)
-    x_2, y_2 = Nrotate(degree, int(word_width/4*3), int(word_height / 4),int(word_width/2),int(word_height/2),word_height)
-    x_3, y_3 = Nrotate(degree, int(word_width/4*3), int(word_height/4*3),int(word_width/2),int(word_height/2),word_height)
-    x_4, y_4 = Nrotate(degree, int(word_width/4), int(word_height/4*3),int(word_width/2),int(word_height/2),word_height)
+    x_1, y_1 = Nrotate(degree,int(word_width/2 - (word_width/scale_x)/2),int(word_height/2 - (word_height/scale_y)/2),int(word_width/2),int(word_height/2),word_height)
+    x_2, y_2 = Nrotate(degree, int(word_width/2 + (word_width/scale_x)/2), int(word_height/2 - (word_height/scale_y)/2),int(word_width/2),int(word_height/2),word_height)
+    x_3, y_3 = Nrotate(degree, int(word_width/2 + (word_width/scale_x)/2), int(word_height/2 + (word_height/scale_y)/2),int(word_width/2),int(word_height/2),word_height)
+    x_4, y_4 = Nrotate(degree, int(word_width/2 - (word_width/scale_x)/2), int(word_height/2 + (word_height/scale_y)/2),int(word_width/2),int(word_height/2),word_height)
 
     new_img = Image.new('RGBA', (bg_width, bg_height), color=(0, 0, 0, 255))
     # draw = ImageDraw.Draw(new_img)
@@ -56,18 +56,33 @@ def make_picture(bg,word,degree):
     pts = np.array([[width_x + x_1, height_y + y_1], [width_x + x_2, height_y + y_2], [width_x + x_3, height_y + y_3], [width_x + x_4, height_y + y_4]], np.int32)
     print(width_x + x_1, height_y + y_1)
     pts = pts.reshape((-1, 1, 2))
-    mask = cv2.polylines(mask, [pts], True, (255, 255, 255))
+    mask = cv2.polylines(mask, [pts], True, (255, 255, 255),thickness=3)
+    cv2.imwrite('./label_2.png', mask)
     mask2 = cv2.fillPoly(mask, [pts], (255, 255, 255))
-    cv2.imwrite('./label_2.png', mask2)
+    cv2.imwrite('./label_3.png', mask2)
 
 def make_bigger_picture(path):
     word = Image.open(path)
     word_width = word.size[0]
     word_height = word.size[1]
     region = word
-    new_img_bg = Image.new('RGBA', (word_width * 2, word_height * 2), color=(0, 255, 0, 255))
-    new_img_bg.paste(region, (int(word_width/2),int(word_height/2),int(word_width/2*3),int(word_height/2*3)))
+    scale_x = 2
+    scale_y = 2
+    count_x = word_width*word_width
+    count_y = word_height*word_height
+    if count_x*3 == count_y and count_x == count_y*3:
+        pass
+    if count_x*3 > count_y:
+        while((4*(scale_x-1)*(scale_x-1) - 1)*count_x < count_y):
+            scale_x += 1
+    if count_y*3 > count_x:
+        while((4*(scale_y-1)*(scale_y-1) -1)* count_y < count_x):
+            scale_y += 1
+    print(scale_x,scale_y)
+    new_img_bg = Image.new('RGBA', (word_width * scale_x, word_height * scale_y), color=(0, 255, 0, 255))
+    new_img_bg.paste(region, (int((scale_x-1)/2*word_width),int((scale_y-1)/2*word_height),int((scale_x+1)/2*word_width),int((scale_y+1)/2*word_height)))
     new_img_bg.save('./new_ing.png')
+    return scale_x,scale_y
 
 def make_picture_cv2(bg,word):
     bg = cv2.imread(bg)
@@ -102,7 +117,7 @@ def test(path):
 crop_image = lambda img, x0, y0, w, h: img[y0:y0 + h, x0:x0 + w]
 
 # test('./new_ing.png')
-# make_bigger_picture('C:\\Users\\sunxufeng\\Desktop\\word.jpg')
-make_picture('C:\\Users\\sunxufeng\\Desktop\\bg.jpg','./new_ing.png',60)
+scale_x,scale_y = make_bigger_picture('C:\\Users\\sunxufeng\\Desktop\\word.jpg')
+make_picture('C:\\Users\\sunxufeng\\Desktop\\bg.jpg','./new_ing.png',60,scale_x,scale_y)
 # make_picture('C:\\Users\\sunxufeng\\Desktop\\bg.jpg','C:\\Users\\sunxufeng\\Desktop\\word.jpg')
 # make_picture_cv2('C:\\Users\\sunxufeng\\Desktop\\bg.jpg','C:\\Users\\sunxufeng\\Desktop\\word.jpg')
